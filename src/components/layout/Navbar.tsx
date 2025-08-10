@@ -33,7 +33,7 @@ export default function TopNav({ isOpen, toggleSidebar }: AdminSidebarProps) {
   const handleLogout = () => {
     localStorage.removeItem('role');
     router.push('/');
-  };
+  };    
 
   return (
     <div className='w-full h-16 bg-gray-50 flex items-center justify-between px-4 shadow-md sticky top-0 z-50'>
