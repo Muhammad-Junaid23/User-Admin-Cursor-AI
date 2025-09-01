@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { Home, BarChart2 } from 'lucide-react';
+import { Home, BarChart2, MonitorCog } from 'lucide-react';
 
 const navItems = [
   { name: 'Inventory', href: '/admin', icon: Home },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart2 },
+  { name: 'Content Management', href: '/admin/contentManagement', icon: MonitorCog },
 ];
 
 interface AdminSidebarProps {
@@ -21,7 +22,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: AdminSidebarProps) {
   return (
     <aside
       className={clsx(
-        'h-[calc(100vh-3.5rem)] z-40 bg-white shadow-lg p-6 flex flex-col justify-between transition-all duration-300 ease-in-out',
+        'h-[calc(100vh-3.5rem)] z-40 bg-white shadow-lg px-4 py-6 flex flex-col justify-between transition-all duration-300 ease-in-out',
         isOpen ? 'fixed inset-y-14 left-0 w-64 translate-x-0' : 'fixed inset-y-14 -left-64'
       )}
     >
