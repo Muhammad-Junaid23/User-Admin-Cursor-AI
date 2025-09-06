@@ -4,12 +4,6 @@ A modern, role-based admin dashboard for Nexus Desktop POS, built with **Next.js
 
 ---
 
-## 📸 Demo
-
-> 🔐 [Login Protected Admin Dashboard Preview](#)
-
----
-
 ## ✨ Features
 
 - 🔐 **Admin Login Flow**
