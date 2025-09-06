@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { INITIAL_DATA } from '@/components/inventory/dummyData';
 import EditItemModal from '@/components/contentManagement/EditItemModal';
@@ -37,7 +36,6 @@ export default function ContentManagementPage() {
 
   return (
     <div className='flex flex-col h-full'>
-      {/* Header */}
       <Header
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -47,21 +45,17 @@ export default function ContentManagementPage() {
       />
 
       <div className='flex flex-1'>
-        {/* Subcategories Sidebar */}
         <SubcategoriesSidebar
           subCategories={subCategories}
           selectedSubCategory={selectedSubCategory}
           setSelectedSubCategory={setSelectedSubCategory}
         />
 
-        {/* Items Grid */}
         <ItemsGrid items={items} setEditingItem={setEditingItem} />
 
-        {/* Cart */}
         <Cart cart={cart} setCart={setCart} total={total} />
       </div>
 
-      {/* Edit Modal */}
       {editingItem && <EditItemModal item={editingItem} onClose={() => setEditingItem(null)} />}
     </div>
   );
