@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { ChevronDown } from 'lucide-react';
@@ -20,14 +19,12 @@ type SalesDataType = {
 const transformDataToSales = (): SalesDataType => {
   const salesData: SalesDataType = {};
 
-  // Monthly data - top products by quantity across all categories
   const allProducts: SalesItem[] = [];
   const seenNames = new Set<string>();
 
   Object.entries(INITIAL_DATA).forEach(([category, subCategories]) => {
-    Object.entries(subCategories).forEach(([subCategory, products]) => {
+    Object.entries(subCategories).forEach(([_, products]) => {
       products.forEach((product) => {
-        // Only add if we haven't seen this name before
         if (!seenNames.has(product.name)) {
           seenNames.add(product.name);
           allProducts.push({
@@ -40,10 +37,8 @@ const transformDataToSales = (): SalesDataType => {
     });
   });
 
-  // Sort by quantity and take top 10
   salesData.monthly = allProducts.sort((a, b) => b.value - a.value).slice(0, 10);
 
-  // Daily data - sample daily sales
   salesData.daily = [
     { name: 'Mon', value: 200, price: 2340 },
     { name: 'Tue', value: 500, price: 4230 },
@@ -54,10 +49,8 @@ const transformDataToSales = (): SalesDataType => {
     { name: 'Sun', value: 1500, price: 1230 },
   ];
 
-  // Top products - top 5 by quantity
   salesData.topProducts = allProducts.sort((a, b) => b.value - a.value).slice(0, 5);
 
-  // Category-specific data
   salesData.pharmacy = Object.values(INITIAL_DATA.Pharmacy)
     .flat()
     .sort((a, b) => b.quantity - a.quantity)
@@ -103,10 +96,13 @@ const transformDataToSales = (): SalesDataType => {
 
 const salesData = transformDataToSales();
 
-const filterOptions = [
+const filterButtons = [
   { value: 'monthly', label: 'Monthly' },
   { value: 'daily', label: 'Daily' },
   { value: 'topProducts', label: 'Top Products' },
+];
+
+const categoryOptions = [
   { value: 'pharmacy', label: 'Pharmacy' },
   { value: 'grocery', label: 'Grocery' },
   { value: 'electronics', label: 'Electronics' },
@@ -115,40 +111,80 @@ const filterOptions = [
 
 export default function SalesChart() {
   const [filter, setFilter] = useState('monthly');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [category, setCategory] = useState<string | null>(null);
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
-  const currentData = salesData[filter] || salesData.monthly;
-  const currentFilterLabel = filterOptions.find((option) => option.value === filter)?.label || 'Monthly';
+  let currentData: SalesItem[];
+  if (filter === 'topProducts') {
+    if (category) {
+      currentData = salesData[category] || salesData.topProducts;
+    } else {
+      currentData = salesData.topProducts;
+    }
+  } else {
+    currentData = salesData[filter] || salesData.monthly;
+  }
 
   return (
     <div className='w-full p-4 rounded-xl bg-white shadow-md'>
       <div className='flex items-center justify-between mb-4'>
         <h2 className='text-lg font-semibold text-gray-800'>Sales Analytics</h2>
 
-        {/* Single Dropdown Filter */}
-        <div className='relative'>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className='flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors'
-          >
-            <span>{currentFilterLabel}</span>
-            <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-          </button>
+        <div className='flex items-center gap-3'>
+          {/* Filter Buttons */}
+          {filterButtons.map((btn) => (
+            <button
+              key={btn.value}
+              onClick={() => {
+                setFilter(btn.value);
+                if (btn.value !== 'topProducts') {
+                  setCategory(null);
+                }
+              }}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                filter === btn.value ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {btn.label}
+            </button>
+          ))}
 
-          {isDropdownOpen && (
-            <div className='absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10'>
-              {filterOptions.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => {
-                    setFilter(option.value);
-                    setIsDropdownOpen(false);
-                  }}
-                  className='w-full text-left px-4 py-2 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg text-gray-900'
-                >
-                  {option.label}
-                </button>
-              ))}
+          {/* Category Dropdown (only for Top Products) */}
+          {filter === 'topProducts' && (
+            <div className='relative'>
+              <button
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                className='flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors'
+              >
+                <span>{category ? categoryOptions.find((c) => c.value === category)?.label : 'All Categories'}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isCategoryOpen && (
+                <div className='absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10'>
+                  <button
+                    onClick={() => {
+                      setCategory(null);
+                      setIsCategoryOpen(false);
+                    }}
+                    className='w-full text-left px-4 py-2 hover:bg-gray-100 first:rounded-t-lg text-gray-900'
+                  >
+                    All Categories
+                  </button>
+                  {categoryOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setCategory(option.value);
+                        setIsCategoryOpen(false);
+                      }}
+                      className='w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-900'
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -165,7 +201,7 @@ export default function SalesChart() {
         </BarChart>
       </ResponsiveContainer>
 
-      {/* Product prices display - aligned with chart bars */}
+      {/* Product prices aligned with chart bars */}
       <div className='mt-2 ml-16 text-sm text-gray-600'>
         <div
           className='relative'
@@ -175,7 +211,7 @@ export default function SalesChart() {
             gap: '0',
           }}
         >
-          {currentData.map((item: SalesItem, index: number) => (
+          {currentData.map((item: SalesItem) => (
             <div key={item.name} className='text-center px-1'>
               <div className='font-medium text-xs leading-tight break-words'>{item.name}</div>
               <div className='text-green-600 font-semibold'>Rs {item.price}</div>
