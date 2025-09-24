@@ -4,9 +4,9 @@ import SalesChart from '@/components/analytics/SalesChart';
 
 export default function AnalyticsPage() {
   return (
-    <div className='p-6 space-y-6'>
-      <SalesChart />
+    <div className='px-6 py-2 space-y-2'>
       <SummaryCards />
+      <SalesChart />
     </div>
   );
 }

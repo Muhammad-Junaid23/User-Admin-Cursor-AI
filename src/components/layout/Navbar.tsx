@@ -2,12 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, Settings, UserCircle2, Menu, X } from 'lucide-react';
 
-interface AdminSidebarProps {
-  isOpen: boolean;
-  toggleSidebar: () => void;
-}
-
-export default function TopNav({ isOpen, toggleSidebar }: AdminSidebarProps) {
+export default function TopNav() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,18 +28,18 @@ export default function TopNav({ isOpen, toggleSidebar }: AdminSidebarProps) {
   const handleLogout = () => {
     localStorage.removeItem('role');
     router.push('/');
-  };    
+  };
 
   return (
     <div className='w-full h-16 bg-gray-50 flex items-center justify-between px-4 shadow-md sticky top-0 z-50'>
       <div className='flex items-center gap-3'>
-        <button
+        {/* <button
           onClick={toggleSidebar}
           className='text-gray-700 cursor-pointer hover:text-gray-900 focus:outline-none'
           aria-label='Toggle sidebar'
         >
           {isOpen ? <X className='w-6 h-6' /> : <Menu className='w-6 h-6' />}
-        </button>
+        </button> */}
         <h1 className='text-2xl font-extrabold text-[#017019]'>NEXUS DESKTOP</h1>
       </div>
 
