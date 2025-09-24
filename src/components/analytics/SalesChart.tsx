@@ -43,23 +43,15 @@ const transformDataToSales = (): SalesDataType => {
   // Sort by quantity and take top 10
   salesData.monthly = allProducts.sort((a, b) => b.value - a.value).slice(0, 10);
 
-  // Weekly data - sample weekly sales
-  salesData.weekly = [
-    { name: 'Week 1', value: 2000, price: 0 },
-    { name: 'Week 2', value: 5000, price: 0 },
-    { name: 'Week 3', value: 4000, price: 0 },
-    { name: 'Week 4', value: 15000, price: 0 },
-  ];
-
   // Daily data - sample daily sales
   salesData.daily = [
-    { name: 'Mon', value: 200, price: 0 },
-    { name: 'Tue', value: 500, price: 0 },
-    { name: 'Wed', value: 400, price: 0 },
-    { name: 'Thu', value: 1000, price: 0 },
-    { name: 'Fri', value: 800, price: 0 },
-    { name: 'Sat', value: 1200, price: 0 },
-    { name: 'Sun', value: 1500, price: 0 },
+    { name: 'Mon', value: 200, price: 2340 },
+    { name: 'Tue', value: 500, price: 4230 },
+    { name: 'Wed', value: 400, price: 4230 },
+    { name: 'Thu', value: 1000, price: 5230 },
+    { name: 'Fri', value: 800, price: 320 },
+    { name: 'Sat', value: 1200, price: 210 },
+    { name: 'Sun', value: 1500, price: 1230 },
   ];
 
   // Top products - top 5 by quantity
@@ -113,7 +105,6 @@ const salesData = transformDataToSales();
 
 const filterOptions = [
   { value: 'monthly', label: 'Monthly' },
-  { value: 'weekly', label: 'Weekly' },
   { value: 'daily', label: 'Daily' },
   { value: 'topProducts', label: 'Top Products' },
   { value: 'pharmacy', label: 'Pharmacy' },
@@ -163,19 +154,8 @@ export default function SalesChart() {
         </div>
       </div>
 
-      <ResponsiveContainer width='100%' height={400}>
+      <ResponsiveContainer width='100%' height={280}>
         <BarChart data={currentData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
-          <XAxis
-            dataKey='name'
-            angle={-30}
-            textAnchor='end'
-            height={60}
-            tick={{ fontSize: 12 }}
-            tickFormatter={(value, index) => {
-              const item = currentData[index];
-              return item && item.price > 0 ? `${value}` : value;
-            }}
-          />
           <YAxis label={{ value: 'Quantity Sold', angle: -90, position: 'insideLeft' }} tick={{ fontSize: 12 }} />
           <Tooltip
             formatter={(value: number, name: string) => [`${value} units`, name === 'value' ? 'Quantity' : name]}
@@ -186,7 +166,7 @@ export default function SalesChart() {
       </ResponsiveContainer>
 
       {/* Product prices display - aligned with chart bars */}
-      <div className='mt-2 text-sm text-gray-600'>
+      <div className='mt-2 ml-16 text-sm text-gray-600'>
         <div
           className='relative'
           style={{

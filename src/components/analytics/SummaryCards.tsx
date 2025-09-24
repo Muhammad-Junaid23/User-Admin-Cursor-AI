@@ -13,11 +13,14 @@ export function SummaryCards() {
       {data.map((card, i) => (
         <div
           key={i}
-          className='bg-white border border-gray-200 text-gray-900 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200'
+          className='bg-white border border-gray-200 text-gray-900 rounded-2xl p-3 shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center gap-4'
         >
           <div className='text-4xl mb-3'>{card.icon}</div>
-          <h3 className='text-base font-medium text-gray-600 mb-1'>{card.title}</h3>
-          <p className='text-2xl font-bold text-gray-800'>{card.value}</p>
+
+          <div>
+            <h3 className='text-base font-medium text-gray-600 mb-1'>{card.title}</h3>
+            <p className='text-2xl font-bold text-gray-800'>{card.value}</p>
+          </div>
         </div>
       ))}
     </div>

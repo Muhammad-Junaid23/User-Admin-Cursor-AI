@@ -13,7 +13,10 @@ export default function HomePage() {
         </p>
 
         <div className='flex flex-col sm:flex-row justify-center gap-4'>
-          <Link href='/admin' className='px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition'>
+          <Link
+            href='/admin/analytics'
+            className='px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition'
+          >
             Get Started
           </Link>
         </div>
