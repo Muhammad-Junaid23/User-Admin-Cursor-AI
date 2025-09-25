@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = ({ selectedCategory, setSelectedCategory, categories, setSelectedSubCategory, INITIAL_DATA }: any) => {
   return (
-    <div className='flex justify-between items-center p-4 shadow-sm hover:shadow-md bg-white rounded-xl'>
+    <div className='flex justify-between items-center p-4 shadow-sm hover:shadow-md bg-white rounded'>
       <button className='px-4 py-2 bg-gray-200 rounded'>QR Scanner</button>
       <select
         className='px-4 py-2 shadow-sm hover:shadow-md bg-white rounded focus:outline-0'
