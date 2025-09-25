@@ -2,7 +2,7 @@ import React from 'react';
 
 const SubcategoriesSidebar = ({ subCategories, selectedSubCategory, setSelectedSubCategory }: any) => {
   return (
-    <div className='w-1/5 p-4 space-y-2 rounded-l-xl mt-1 bg-white shadow-lg'>
+    <div className='w-1/5 py-4 px-2 space-y-2 mt-1 bg-white shadow-lg'>
       {subCategories.map((sub) => (
         <button
           key={sub}
