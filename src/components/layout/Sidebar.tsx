@@ -1,5 +1,4 @@
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -14,7 +13,6 @@ const navItems = [
 export default function Sidebar({ isOpen, isContentManagement }: { isOpen: boolean; isContentManagement: boolean }) {
   const pathname = usePathname();
 
-  // If not content management, always show sidebar
   const showSidebar = isContentManagement ? isOpen : true;
 
   return (
@@ -38,7 +36,6 @@ export default function Sidebar({ isOpen, isContentManagement }: { isOpen: boole
                 'flex items-center gap-2 px-4 py-2 rounded-md transition',
                 pathname === item.href ? 'bg-[#00BE38] text-white font-medium' : 'hover:bg-gray-100 text-gray-800'
               )}
-              // onClick={toggleSidebar}
             >
               <item.icon className='w-5 h-5' />
               {item.name}
