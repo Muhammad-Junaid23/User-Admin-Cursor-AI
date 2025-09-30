@@ -41,7 +41,6 @@ export default function TopNav({
   return (
     <div className='w-full h-16 bg-gray-50 flex items-center justify-between px-4 shadow-md sticky top-0 z-50'>
       <div className='flex items-center gap-3'>
-        {/* Show toggle button only for content management */}
         {isContentManagement && (
           <button
             onClick={toggleSidebar}

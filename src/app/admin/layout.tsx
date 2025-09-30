@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
@@ -11,10 +10,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [authorized, setAuthorized] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Detect if current route is content management
   const isContentManagement = pathname === '/admin/contentManagement';
 
-  // Toggle sidebar only for content management
   const toggleSidebar = () => {
     if (isContentManagement) {
       setSidebarOpen((prev) => !prev);
@@ -30,10 +27,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [router]);
 
-  // Close sidebar on route change if on content management
   useEffect(() => {
     if (!isContentManagement) {
-      setSidebarOpen(true); // Always open for other pages
+      setSidebarOpen(true);
     }
   }, [pathname, isContentManagement]);
 
