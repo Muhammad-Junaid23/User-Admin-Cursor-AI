@@ -13,7 +13,7 @@ const ItemsGrid = ({ items, setEditingItem }: any) => {
             <span className='text-xs text-gray-500'>Image</span>
           </div>
           <h3 className='font-semibold text-sm text-center text-gray-800 truncate w-full'>{item.name}</h3>
-          <p className='text-gray-500 text-xs'>Rs. {item.price}</p>
+          <p className='text-gray-900 text-xs'>Rs. {item.price}</p>
         </div>
       ))}
     </div>
