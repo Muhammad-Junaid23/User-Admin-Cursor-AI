@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { Home, BarChart2, MonitorCog, ChartNoAxesCombined } from 'lucide-react';
+import { Home, BarChart2, MonitorCog, ChartNoAxesCombined, ClipboardList } from 'lucide-react';
 
 const navItems = [
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart2 },
   { name: 'Inventory', href: '/admin/inventory', icon: Home },
   { name: 'Stocks', href: '/admin/stocks', icon: ChartNoAxesCombined },
+  { name: 'Reports', href: '/admin/reports', icon: ClipboardList },
   { name: 'Content Management', href: '/admin/contentManagement', icon: MonitorCog },
 ];
 
