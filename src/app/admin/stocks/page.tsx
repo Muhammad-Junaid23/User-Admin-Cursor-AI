@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { INITIAL_DATA } from '@/components/inventory/dummyData';
 
 interface StockItem {
@@ -25,6 +25,7 @@ const StocksPage = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>(categories[0]);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>('All');
+  const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
 
   const subCategories = useMemo(() => {
     const subs = Object.keys(INITIAL_DATA[selectedCategory] ?? {});
@@ -55,8 +56,18 @@ const StocksPage = () => {
 
   return (
     <div className='p-6 space-y-6'>
-      <h1 className='text-2xl font-bold text-gray-800'>Stocks Overview</h1>
+      {/* Header with toggle button */}
+      <div className='flex justify-between items-center'>
+        <h1 className='text-2xl font-bold text-gray-800'>Stocks Overview</h1>
+        <button
+          onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')}
+          className='px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition'
+        >
+          {chartType === 'bar' ? 'Switch to Pie Chart' : 'Switch to Bar Chart'}
+        </button>
+      </div>
 
+      {/* Filters */}
       <div className='flex flex-col sm:flex-row gap-3 mb-6'>
         <div className='flex-1 sm:flex-none'>
           <label className='block text-xs font-medium text-gray-600 mb-1'>Category</label>
@@ -64,7 +75,7 @@ const StocksPage = () => {
             value={selectedCategory}
             onChange={(e) => {
               setSelectedCategory(e.target.value);
-              setSelectedSubCategory('All');
+              setSelectedSubCategory('All'); // reset to All
             }}
             className='w-full sm:w-64 px-2 py-2 border border-gray-300 rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
           >
@@ -92,18 +103,34 @@ const StocksPage = () => {
         </div>
       </div>
 
-      {/* Bar Chart */}
-      <div className='h-[400px] w-full bg-white p-4 pl-0 rounded-xl shadow'>
+      {/* Chart */}
+      <div className='h-[400px] w-full bg-white p-4 rounded-xl shadow'>
         {chartData.length > 0 ? (
           <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='name' tick={{ fontSize: 12 }} />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey='quantity' radius={[6, 6, 0, 0]} />
-            </BarChart>
+            {chartType === 'bar' ? (
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' tick={{ fontSize: 12 }} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey='quantity' radius={[6, 6, 0, 0]}>
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill || COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            ) : (
+              <PieChart>
+                <Tooltip />
+                <Legend />
+                <Pie data={chartData} dataKey='quantity' nameKey='name' outerRadius={150} label>
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill || COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            )}
           </ResponsiveContainer>
         ) : (
           <p className='text-gray-500 text-center mt-16'>No stock data available for this selection</p>
