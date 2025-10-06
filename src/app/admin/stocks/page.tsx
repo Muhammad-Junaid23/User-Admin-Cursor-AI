@@ -35,6 +35,7 @@ const StocksPage = () => {
   const chartData: StockItem[] = useMemo(() => {
     if (!selectedCategory) return [];
 
+    // Case 1: "All" → aggregate subcategories
     if (selectedSubCategory === 'All') {
       return Object.entries(INITIAL_DATA[selectedCategory]).map(([subCat, products], i) => ({
         name: subCat,
@@ -43,6 +44,7 @@ const StocksPage = () => {
       }));
     }
 
+    // Case 2: Specific subcategory → product-level
     if (selectedSubCategory && INITIAL_DATA[selectedCategory][selectedSubCategory]) {
       return INITIAL_DATA[selectedCategory][selectedSubCategory].map((product, i) => ({
         name: product.name,
@@ -56,7 +58,7 @@ const StocksPage = () => {
 
   return (
     <div className='p-6 space-y-6'>
-      {/* Header with toggle button */}
+      {/* Header + Toggle Button */}
       <div className='flex justify-between items-center'>
         <h1 className='text-2xl font-bold text-gray-800'>Stocks Overview</h1>
         <button
@@ -75,7 +77,7 @@ const StocksPage = () => {
             value={selectedCategory}
             onChange={(e) => {
               setSelectedCategory(e.target.value);
-              setSelectedSubCategory('All'); // reset to All
+              setSelectedSubCategory('All');
             }}
             className='w-full sm:w-64 px-2 py-2 border border-gray-300 rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
           >
@@ -103,11 +105,11 @@ const StocksPage = () => {
         </div>
       </div>
 
-      {/* Chart */}
-      <div className='h-[400px] w-full bg-white p-4 rounded-xl shadow'>
+      {/* Chart Section */}
+      <div className='h-[420px] w-full bg-white p-4 rounded-xl shadow flex items-center justify-center'>
         {chartData.length > 0 ? (
-          <ResponsiveContainer width='100%' height='100%'>
-            {chartType === 'bar' ? (
+          chartType === 'bar' ? (
+            <ResponsiveContainer width='100%' height='100%'>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' tick={{ fontSize: 12 }} />
@@ -120,18 +122,32 @@ const StocksPage = () => {
                   ))}
                 </Bar>
               </BarChart>
-            ) : (
-              <PieChart>
-                <Tooltip />
-                <Legend />
-                <Pie data={chartData} dataKey='quantity' nameKey='name' outerRadius={150} label>
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill || COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            )}
-          </ResponsiveContainer>
+            </ResponsiveContainer>
+          ) : (
+            <div className='flex justify-center items-center gap-8 w-full h-full'>
+              {/* Pie Chart Left */}
+              <ResponsiveContainer width='60%' height='100%'>
+                <PieChart>
+                  <Tooltip />
+                  <Pie data={chartData} dataKey='quantity' nameKey='name' outerRadius={140} label>
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill || COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+
+              {/* Legend Right */}
+              <div className='flex flex-col gap-2'>
+                {chartData.map((entry, index) => (
+                  <div key={index} className='flex items-center gap-2'>
+                    <div className='w-3 h-3 rounded-full' style={{ backgroundColor: entry.fill || COLORS[index % COLORS.length] }}></div>
+                    <span className='text-sm text-gray-700'>{entry.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
         ) : (
           <p className='text-gray-500 text-center mt-16'>No stock data available for this selection</p>
         )}
