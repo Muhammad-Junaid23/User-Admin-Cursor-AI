@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { format, subDays, isWithinInterval } from 'date-fns';
+import { format, addDays, subDays, isWithinInterval } from 'date-fns';
 import { Download, DollarSign, Package, ShoppingCart } from 'lucide-react';
 
 // Dummy products
@@ -19,14 +19,13 @@ const PRODUCTS = [
 ];
 
 // Generate dummy sales
-const generateSales = (count = 100) => {
+const generateSales = (count = 120) => {
   const sales = [];
   for (let i = 0; i < count; i++) {
     const product = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
     const quantity = Math.floor(Math.random() * 10) + 1;
     const daysAgo = Math.floor(Math.random() * 60);
     const date = subDays(new Date(), daysAgo);
-
     sales.push({
       id: i + 1,
       productName: product.name,
@@ -40,29 +39,39 @@ const generateSales = (count = 100) => {
   return sales;
 };
 
-const SALES_DATA = generateSales(120);
+const SALES_DATA = generateSales();
 
 export default function ReportsPage() {
   const [filter, setFilter] = useState('weekly');
-  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [selectedDate, setSelectedDate] = useState(format(subDays(new Date(), 7), 'yyyy-MM-dd'));
   const [customStart, setCustomStart] = useState('');
   const [customEnd, setCustomEnd] = useState('');
 
-  // Filter sales
+  // Adjust selectedDate automatically when filter changes
+  useEffect(() => {
+    if (filter === 'daily') {
+      setSelectedDate(format(new Date(), 'yyyy-MM-dd'));
+    } else if (filter === 'weekly') {
+      setSelectedDate(format(subDays(new Date(), 7), 'yyyy-MM-dd'));
+    } else if (filter === 'monthly') {
+      setSelectedDate(format(subDays(new Date(), 30), 'yyyy-MM-dd'));
+    }
+  }, [filter]);
+
+  // Filter logic
   const filteredData = useMemo(() => {
-    const today = new Date(selectedDate);
     let startDate: Date;
     let endDate: Date;
 
     if (filter === 'daily') {
-      startDate = subDays(today, 1);
-      endDate = today;
+      startDate = new Date(selectedDate);
+      endDate = addDays(startDate, 1);
     } else if (filter === 'weekly') {
-      startDate = subDays(today, 6);
-      endDate = today;
+      startDate = new Date(selectedDate);
+      endDate = addDays(startDate, 7);
     } else if (filter === 'monthly') {
-      startDate = subDays(today, 29);
-      endDate = today;
+      startDate = new Date(selectedDate);
+      endDate = addDays(startDate, 30);
     } else if (filter === 'custom' && customStart && customEnd) {
       startDate = new Date(customStart);
       endDate = new Date(customEnd);
@@ -78,14 +87,19 @@ export default function ReportsPage() {
   const totalProducts = filteredData.reduce((acc, item) => acc + item.quantity, 0);
   const totalTransactions = filteredData.length;
 
-  // PDF export
+  // PDF Export
   const downloadPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text('POS Sales Report', 14, 15);
     doc.setFontSize(12);
     doc.text(`Filter: ${filter.toUpperCase()}`, 14, 25);
-    doc.text(`Date: ${selectedDate}`, 14, 32);
+
+    if (filter === 'custom' && customStart && customEnd) {
+      doc.text(`Date Range: ${customStart} → ${customEnd}`, 14, 32);
+    } else {
+      doc.text(`Date: ${selectedDate}`, 14, 32);
+    }
 
     doc.text(`Total Revenue: Rs ${totalRevenue.toLocaleString()}`, 14, 42);
     doc.text(`Total Products Sold: ${totalProducts}`, 14, 49);
@@ -111,7 +125,69 @@ export default function ReportsPage() {
 
   return (
     <div className='p-6 space-y-6'>
-      <h1 className='text-2xl font-bold mb-4'>Reports</h1>
+      <div className='flex items-center justify-between'>
+        <h1 className='text-2xl font-bold'>Reports</h1>
+        <button
+          onClick={downloadPDF}
+          className='cursor-pointer ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-md border bg-blue-600 text-white hover:bg-blue-700'
+        >
+          <Download className='w-4 h-4' /> Download PDF
+        </button>
+      </div>
+
+      {/* Filters */}
+      <div className='flex flex-wrap items-end gap-4 p-4 bg-white rounded-lg shadow'>
+        {/* Filter buttons */}
+        <div className='flex gap-2'>
+          {['daily', 'weekly', 'monthly', 'custom'].map((type) => (
+            <button
+              key={type}
+              onClick={() => setFilter(type)}
+              className={`px-4 py-2 rounded-md border text-sm font-medium transition-all ${
+                filter === type ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-blue-50'
+              }`}
+            >
+              {type === 'daily' ? 'Daily' : type === 'weekly' ? 'Weekly' : type === 'monthly' ? 'Monthly' : 'Custom Range'}
+            </button>
+          ))}
+        </div>
+
+        {/* Date selectors */}
+        {filter !== 'custom' && (
+          <div>
+            <label className='block text-xs font-medium text-gray-600 mb-1'>{filter === 'daily' ? 'Select Date' : 'Start Date'}</label>
+            <input
+              type='date'
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
+            />
+          </div>
+        )}
+
+        {filter === 'custom' && (
+          <div className='flex gap-2'>
+            <div>
+              <label className='block text-xs font-medium text-gray-600 mb-1'>Start</label>
+              <input
+                type='date'
+                value={customStart}
+                onChange={(e) => setCustomStart(e.target.value)}
+                className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
+              />
+            </div>
+            <div>
+              <label className='block text-xs font-medium text-gray-600 mb-1'>End</label>
+              <input
+                type='date'
+                value={customEnd}
+                onChange={(e) => setCustomEnd(e.target.value)}
+                className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Summary cards */}
       <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
@@ -144,65 +220,6 @@ export default function ReportsPage() {
             <p className='text-lg font-bold text-gray-900'>{totalTransactions}</p>
           </div>
         </div>
-      </div>
-
-      {/* Filters */}
-      <div className='flex flex-wrap items-end gap-4 p-4 bg-white rounded-lg shadow'>
-        <div>
-          <label className='block text-xs font-medium text-gray-600 mb-1'>Report Type</label>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className='w-48 px-2 py-2 border border-gray-300 rounded-md bg-white text-gray-800 shadow-sm focus:ring-2 focus:ring-blue-500'
-          >
-            <option value='daily'>Daily</option>
-            <option value='weekly'>Weekly</option>
-            <option value='monthly'>Monthly</option>
-            <option value='custom'>Custom Range</option>
-          </select>
-        </div>
-
-        {filter !== 'custom' && (
-          <div>
-            <label className='block text-xs font-medium text-gray-600 mb-1'>Select Date</label>
-            <input
-              type='date'
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
-            />
-          </div>
-        )}
-
-        {filter === 'custom' && (
-          <div className='flex gap-2'>
-            <div>
-              <label className='block text-xs font-medium text-gray-600 mb-1'>Start</label>
-              <input
-                type='date'
-                value={customStart}
-                onChange={(e) => setCustomStart(e.target.value)}
-                className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
-            <div>
-              <label className='block text-xs font-medium text-gray-600 mb-1'>End</label>
-              <input
-                type='date'
-                value={customEnd}
-                onChange={(e) => setCustomEnd(e.target.value)}
-                className='px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={downloadPDF}
-          className='cursor-pointer ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-md border bg-blue-600 text-white shadow hover:bg-blue-700'
-        >
-          <Download className='w-4 h-4' /> Download PDF
-        </button>
       </div>
 
       {/* Table */}
