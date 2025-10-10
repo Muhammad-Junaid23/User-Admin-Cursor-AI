@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { INITIAL_DATA } from '@/components/inventory/dummyData';
-import Header from '@/components/contentManagement/Header';
+import Header from '@/components/pos/Header';
 import SubcategoriesSidebar from '@/components/contentManagement/SubcategoriesSidebar';
 import ItemsGrid from '@/components/pos/ItemsGrid';
 import Cart from '@/components/pos/Cart';
