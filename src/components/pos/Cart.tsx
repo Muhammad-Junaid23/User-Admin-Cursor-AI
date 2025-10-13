@@ -7,13 +7,13 @@ const Cart = ({ cart, setCart, total }: any) => {
   };
 
   return (
-    <div className='w-xl h-full bg-white shadow-lg p-4 flex flex-col rounded-l-xl mt-1'>
+    <div className='w-lg h-full bg-white shadow-lg p-4 flex flex-col rounded-l-xl mt-1'>
       {/* Header Buttons */}
-      <div className='flex justify-between gap-.5 mb-3'>
+      <div className='flex gap-3 mb-3'>
         <button className='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300'>Items: {cart.length}</button>
-        <button className='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300'>Return</button>
-        <button className='px-3 py-1 bg-yellow-500 text-white rounded'>QR Scan</button>
-        <button className='px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 ' onClick={() => setCart([])}>
+        <button className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600'>Return</button>
+        {/* <button className='px-3 py-1 bg-yellow-500 text-white rounded'>QR Scan</button> */}
+        <button className='px-3 py-1 bg-red-500 text-white rounded ml-auto hover:bg-red-600 ' onClick={() => setCart([])}>
           Clear
         </button>
       </div>
