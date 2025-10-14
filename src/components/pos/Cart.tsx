@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2, CirclePlus, CircleMinus } from 'lucide-react';
+import { Trash2, CirclePlus, CircleMinus, Save, Printer } from 'lucide-react';
 
 const Cart = ({ cart, setCart, total }: any) => {
   const handleRemove = (id: number) => {
@@ -11,9 +11,9 @@ const Cart = ({ cart, setCart, total }: any) => {
       {/* Header Buttons */}
       <div className='flex gap-3 mb-3'>
         <button className='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300'>Items: {cart.length}</button>
-        <button className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600'>Return</button>
+        <button className='px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer'>Return</button>
         {/* <button className='px-3 py-1 bg-yellow-500 text-white rounded'>QR Scan</button> */}
-        <button className='px-3 py-1 bg-red-500 text-white rounded ml-auto hover:bg-red-600 ' onClick={() => setCart([])}>
+        <button className='px-3 py-1 bg-red-500 text-white rounded ml-auto hover:bg-red-600 cursor-pointer' onClick={() => setCart([])}>
           Clear
         </button>
       </div>
@@ -67,9 +67,19 @@ const Cart = ({ cart, setCart, total }: any) => {
       {/* Footer */}
       <div className='mt-3'>
         <p className='font-bold text-right text-gray-800'>Total: Rs. {total}</p>
+
         <div className='flex gap-2 mt-3'>
-          <button className='flex-1 bg-[#00BE38] text-white py-2 rounded-lg'>Save Bill</button>
-          <button className='flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700'>Print Bill</button>
+          {/* Save Bill Button */}
+          <button className='flex-1 flex items-center justify-center gap-2 bg-[#00BE38] text-white py-2 rounded-lg hover:bg-[#00a732] transition cursor-pointer'>
+            <Save className='w-4 h-4' />
+            <span>Save Bill</span>
+          </button>
+
+          {/* Print Bill Button */}
+          <button className='flex-1 flex items-center justify-center gap-2 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition cursor-pointer'>
+            <Printer className='w-4 h-4' />
+            <span>Print Bill</span>
+          </button>
         </div>
       </div>
     </div>
