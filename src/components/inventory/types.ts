@@ -5,7 +5,7 @@ export type InventoryItem = {
   subCategory: string;
   price: number;
   quantity: number;
-  imageUrl?: string;
+  image?: string;
 };
 
 export type CategoryMap = Record<string, Record<string, InventoryItem[]>>;
