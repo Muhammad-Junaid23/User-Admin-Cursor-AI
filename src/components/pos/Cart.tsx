@@ -35,7 +35,7 @@ const Cart = ({ cart, setCart, total }: any) => {
                 <span className='truncate'>{item.name}</span>
               </div>
 
-              <div className='flex justify-center items-center gap-1'>
+              <div className='flex justify-center items-center bg-gray-100 rounded-full'>
                 <button
                   onClick={() =>
                     setCart((prev: any[]) => prev.map((c) => (c.id === item.id && c.quantity > 1 ? { ...c, quantity: c.quantity - 1 } : c)))
@@ -44,7 +44,7 @@ const Cart = ({ cart, setCart, total }: any) => {
                 >
                   <CircleMinus size={18} />
                 </button>
-                <span className='py-1 px-3 bg-gray-100 rounded'>{item.quantity}</span>
+                <span className='py-1 px-2 '>{item.quantity}</span>
                 <button
                   onClick={() => setCart((prev: any[]) => prev.map((c) => (c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c)))}
                   className=' text-green-500 cursor-pointer'
