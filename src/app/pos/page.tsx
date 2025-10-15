@@ -4,6 +4,7 @@ import { INITIAL_DATA } from '@/components/inventory/dummyData';
 import Header from '@/components/pos/Header';
 import SubcategoriesSidebar from '@/components/pos/SubcategoriesSidebar';
 import ItemsGrid from '@/components/pos/ItemsGrid';
+import ItemsGrid2 from '@/components/pos/ItemsGrid2';
 import Cart from '@/components/pos/Cart';
 
 type CategoryMap = typeof INITIAL_DATA;
@@ -55,7 +56,8 @@ export default function POSUserPage() {
         />
 
         {/* Product Grid */}
-        <ItemsGrid items={items} onAddToCart={handleAddToCart} />
+        {/* <ItemsGrid items={items} onAddToCart={handleAddToCart} /> */}
+        <ItemsGrid2 items={items} onAddToCart={handleAddToCart} />
 
         {/* Cart Section */}
         <Cart cart={cart} setCart={setCart} total={total} handleRemove={handleRemove} />
