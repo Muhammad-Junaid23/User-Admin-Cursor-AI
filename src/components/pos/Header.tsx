@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ScanLine, UserCog } from 'lucide-react';
 import Link from 'next/link';
 
 interface HeaderProps {
@@ -34,9 +34,10 @@ const Header = ({ selectedCategory, setSelectedCategory, categories, setSelected
         <div>
           <Link
             href='/admin/analytics'
-            className='font-medium px-4 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-900 cursor-pointer'
+            className='flex items-center gap-2 font-medium px-4 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-900 transition cursor-pointer'
           >
-            Admin Login
+            <UserCog className='w-4 h-4' />
+            <span>Admin Login</span>
           </Link>
         </div>
         <div className='flex items-center justify-between gap-4'>
@@ -53,8 +54,9 @@ const Header = ({ selectedCategory, setSelectedCategory, categories, setSelected
               <ChevronRight className='w-5 h-5 text-gray-700' />
             </button>
           </div>
-          <button className='px-4 py-2 bg-orange-500 font-medium text-white rounded-lg hover:bg-amber-600 transition cursor-pointer'>
-            QR Scanner
+          <button className='flex items-center gap-2 px-4 py-2 bg-orange-500 font-medium text-white rounded-lg hover:bg-amber-600 transition cursor-pointer'>
+            <ScanLine className='w-5 h-5' />
+            <span>QR Scanner</span>
           </button>
         </div>
       </div>
