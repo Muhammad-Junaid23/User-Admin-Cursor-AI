@@ -66,7 +66,7 @@ const Cart = ({ cart, setCart, total }: any) => {
 
       {/* Footer */}
       <div className='mt-3'>
-        <p className='font-bold text-right text-gray-800'>Total: Rs. {total}</p>
+        <p className='font-bold text-right text-gray-800'>Total: Rs {total}</p>
 
         <div className='flex gap-2 mt-3'>
           {/* Save Bill Button */}
