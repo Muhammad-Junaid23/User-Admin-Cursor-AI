@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, ScanLine, UserCog } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Phone, ScanLine, UserCog } from 'lucide-react';
 import Link from 'next/link';
 
 interface HeaderProps {
@@ -24,11 +24,19 @@ const Header = ({ selectedCategory, setSelectedCategory, categories, setSelected
 
   return (
     <header className='w-full bg-white shadow-sm rounded-xl p-3 flex justify-between items-center'>
-      <div className='flex items-center justify-center ml-6'>
+      <div className='flex flex-col items-center justify-center ml-6'>
         <Image src='/images/logo.jpg' alt='Trust Nexus' width={75} height={75} className='rounded-md' />
+        <div className='flex items-center flex-col text-center gap-1'>
+          <p className='text-[10px]'>
+            POWERED BY <strong>TRUST NEXUS</strong>
+          </p>
+          <p className='flex items-center gap-2 text-[10px]'>
+            <Phone className='w-4 h-4' /> 0303-8184136
+          </p>
+        </div>
       </div>
 
-      <h1 className='text-5xl font-bold text-gray-900 text-center flex-1'>Pharmacy</h1>
+      <h1 className='text-5xl font-bold text-gray-900 text-center flex-1'>Nexus Pharmacy</h1>
 
       <div className='flex flex-col items-end gap-3'>
         <div>
