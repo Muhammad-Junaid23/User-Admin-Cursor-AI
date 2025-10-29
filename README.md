@@ -1,41 +1,71 @@
-# 🚀 Nexus Desktop – Admin Panel
+# 💻 Nexus Desktop – Modular POS Platform
 
-A modern, role-based admin dashboard for Nexus Desktop POS, built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**. The dashboard includes secure admin login, access control via reusable table components, and an interactive analytics interface.
+A **modern, modular POS (Point of Sale)** web platform built with **Next.js 15**, **Tailwind CSS**, and **TypeScript**.  
+Nexus Desktop is designed for shopkeepers and small businesses to manage sales, products, and analytics — with role-based dashboards for **Admins** and **Users**, dynamic POS modules, and offline-first PWA support.
 
 ---
 
-## ✨ Features
+## 🚀 Overview
 
-- 🔐 **Admin Login Flow**
-- 🧭 **Role-based Routing**
-- 🧱 **Reusable UI Components (Table, Button, Input)**
-- 📊 **Analytics Dashboard with Charts & Summary Cards**
-- ✅ **User Access Table with Approve/Reject Actions**
-- 🌙 **Responsive Design with Dark/Light Mode Friendly Theme**
+Nexus Desktop is a **progressive web app (PWA)** that combines the simplicity of retail POS systems with the scalability of enterprise dashboards.  
+Each business type (Pharmacy, Grocery, etc.) can activate its own modules — making Nexus Desktop highly **customizable** and **modular**.
+
+---
+
+## ✨ Core Features
+
+### 🧩 POS & User Features
+- 🛒 **Modular Product Grid** (Dynamic per business type)
+- 🧠 **Smart Cart System** with context state & toast notifications  
+- 💳 **Billing Summary** with quantity management and totals  
+- 📦 **Product Filtering** by category/sub-category  
+- ⚡ **Fast Navigation** between modules (state resets on module switch)  
+- 📱 **Responsive UI** for desktop and tablet views  
+
+### 🧑‍💻 Admin Panel Features
+- 🔐 **Secure Login & Logout Flow**
+- 🧭 **Role-Based Access Control**
+- 🧱 **Reusable Components** (Table, Input, Button, etc.)
+- 📊 **Interactive Analytics Dashboard**
+- ✅ **User Access Control Table** (Approve / Reject)
+- 🌙 **Light & Dark Mode Friendly**
+
+### 📈 Analytics & Reporting
+- Sales tracking (Daily / Weekly / Monthly / Top Products)
+- Summary cards for quick insights:
+  - Total Sales  
+  - Orders  
+  - Sales in last 30 days  
+  - Products Sold  
+- Dynamic charts powered by **Recharts**
 
 ---
 
 ## 🛠 Tech Stack
 
-- [Next.js 15 (App Router)](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Lucide React Icons](https://lucide.dev/)
-- [Recharts (for charts)](https://recharts.org/en-US/)
+| Technology | Purpose |
+|-------------|----------|
+| **Next.js 15 (App Router)** | Modern React framework |
+| **Tailwind CSS** | Utility-first responsive styling |
+| **TypeScript** | Type safety and maintainability |
+| **Lucide React Icons** | Elegant and consistent icon set |
+| **Recharts** | Interactive analytics visualization |
+| **Framer Motion** | Smooth UI animations and transitions |
+| **Serwist** | PWA + offline caching support |
 
 ---
 
-## 🧩 Reusable Components
+## 🧩 Modular Architecture
 
-| Component          | Description                       |
-| ------------------ | --------------------------------- |
-| `Table.tsx`        | Reusable, styled table component  |
-| `Button.tsx`       | Consistent button design system   |
-| `Input.tsx`        | Input field with styles and props |
-| `SummaryCards.tsx` | Key metrics (sales, orders, etc.) |
-| `SalesCharts.tsx`  | Bar chart visualizing sales data  |
-| `AdminSidebar.tsx` | Collapsible admin sidebar         |
-| `Navbar.tsx`       | Top nav bar with logout & email   |
+| Module | Description |
+|---------|--------------|
+| **CartContext** | Global cart state management |
+| **ProductCard** | Displays product info & image |
+| **CartSidebar** | Displays added items, total & checkout |
+| **AnalyticsTable** | Tabular view of sales data |
+| **SummaryCards** | Highlights metrics (sales, orders, etc.) |
+| **SalesCharts** | Dynamic charts for performance tracking |
+| **AdminSidebar / Navbar** | Navigation for admin routes |
 
 ---
 
@@ -46,6 +76,10 @@ nexus-desktop/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/login/page.tsx
+│   │   ├── (user)/
+│   │   │   ├── dashboard/page.tsx
+│   │   │   ├── modules/[module]/page.tsx
+│   │   │   └── cart/page.tsx
 │   │   ├── admin/
 │   │   │   ├── layout.tsx
 │   │   │   ├── page.tsx
@@ -54,17 +88,25 @@ nexus-desktop/
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── AdminSidebar.tsx
-│   │   │   └── Navbar.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   └── UserSidebar.tsx
 │   │   ├── analytics/
 │   │   │   ├── SalesCharts.tsx
 │   │   │   ├── SummaryCards.tsx
 │   │   │   └── AnalyticsTable.tsx
+│   │   ├── pos/
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── ItemsGrid.tsx
+│   │   │   ├── CartSidebar.tsx
+│   │   │   └── CartContext.tsx
 │   │   └── ui/
 │   │       ├── Button.tsx
 │   │       ├── Input.tsx
 │   │       └── Table.tsx
 │   ├── lib/utils.ts
 │   ├── middleware.ts
+│   └── context/
+│       └── AuthContext.tsx
 ├── public/
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -75,26 +117,77 @@ nexus-desktop/
 
 ## ⚙️ Workflow
 
-- User lands on landing page and clicks "Get Started"
-- Redirects to login screen
-- On login success → Admin Dashboard
-- Sidebar links: Dashboard, Access Control, Analytics
-- Top navbar displays admin email and logout
-- Users Page: Table with access requests (Approve/Reject)
-- Analytics Page: Sales Bar Chart + Summary Cards
-- Logout redirects back to home
+1. **Landing Page → Login**
+2. **Login (Admin/User)** → Redirect to relevant dashboard
+3. **Admin Dashboard**
+   - View Analytics
+   - Manage Users
+   - Approve Access
+4. **User Dashboard**
+   - View product modules
+   - Add to cart
+   - Generate bills
+5. **Logout** → Back to landing page
 
 ---
 
-## 📈 Analytics
+## 📊 Sample Analytics Page
 
-The analytics page includes:
-
-- Sales chart (Daily, Weekly, Monthly, Top Products)
-- Summary cards:
-  - Total Sales
-  - Orders
-  - Sales in Last 30 Days
-  - Products Sold
+- **Summary Cards:** Key metrics (sales, orders, products)
+- **Sales Chart:** Dynamic filters (Last Month, Daily, Weekly, Top Products)
+- **Analytics Table:** Data-driven breakdown of performance
 
 ---
+
+## 📦 Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Muhammad-Junaid23/Nexus-Desktop.git
+
+# Navigate to project
+cd nexus-desktop
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+Visit **http://localhost:3000**
+
+---
+
+## 🌍 Environment Variables
+
+Create a `.env.local` file and add:
+
+```env
+NEXT_PUBLIC_API_URL=your_backend_api
+NEXTAUTH_SECRET=your_secret
+```
+
+---
+
+## 📱 Progressive Web App (PWA)
+
+- Fully offline capable (via **Serwist**)
+- Can be installed on desktop
+- Auto-caches static assets for speed
+
+---
+
+## 🧑‍💻 Author
+
+**Muhammad Junaid**  
+Junior MERN / Next.js Developer  
+[GitHub](https://github.com/Muhammad-Junaid23) • [LinkedIn](https://www.linkedin.com/in/mjunaid23)
+
+---
+
+## ⭐ Future Improvements
+- Multi-store management  
+- Invoice printing & PDF exports  
+- Real-time sync between devices  
+- Cloud database integration (Supabase / Firebase)
