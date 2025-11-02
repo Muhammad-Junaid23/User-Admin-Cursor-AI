@@ -38,7 +38,6 @@ export default function POSUserPage() {
 
   return (
     <div className='flex flex-col h-screen'>
-      {/* Header */}
       <Header
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -47,7 +46,6 @@ export default function POSUserPage() {
         INITIAL_DATA={INITIAL_DATA}
       />
 
-      {/* Body */}
       <div className='flex flex-1'>
         <SubcategoriesSidebar
           subCategories={subCategories}
@@ -55,11 +53,9 @@ export default function POSUserPage() {
           setSelectedSubCategory={setSelectedSubCategory}
         />
 
-        {/* Product Grid */}
         {/* <ItemsGrid items={items} onAddToCart={handleAddToCart} /> */}
         <ItemsGrid2 items={items} onAddToCart={handleAddToCart} />
 
-        {/* Cart Section */}
         <Cart cart={cart} setCart={setCart} total={total} handleRemove={handleRemove} />
       </div>
     </div>
